@@ -1,0 +1,69 @@
+.navbar-red {
+    background-color: #ff0000;
+}
+
+.navbar-red a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-red a:hover {
+    color: #ffc107;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+}
+
+.search-bar input {
+    padding-right: 40px;
+}
+
+.search-bar i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.fa-magnifying-glass {
+    font-size: 1.2rem;
+}
+
+.input-group .form-control {
+    border-right: 0;
+}
+
+.input-group-text {
+    background-color: transparent;
+    border-left: 0;
+    cursor: pointer;
+}
+
+.input-group-text i {
+    color: #6c757d;
+    font-size: 1.2rem;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    background-color: #f8f9fa;
+    padding: 1rem 0;
+}
