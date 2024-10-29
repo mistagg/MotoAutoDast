@@ -2,7 +2,7 @@
 <!doctype html>
 <html lang="es">
     <head>
-        <title>Header Personalizado</title>
+        <title>MotoAutoDast</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link type='text/css' rel="stylesheet" href="{% static 'css/style1.css' %}">
@@ -64,12 +64,7 @@
         </header>
 
         <main class="container my-5">
-            <div class="row">
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
-                </form>
-            </div>
+
         </main>
 
         <footer class="bg-light text-center">
