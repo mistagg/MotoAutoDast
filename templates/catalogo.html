@@ -2,7 +2,7 @@
 <!doctype html>
 <html lang="es">
     <head>
-        <title>MotoAutoDast</title>
+        <title>MotoAutoDast - {{ categoria }}</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link type='text/css' rel="stylesheet" href="{% static 'css/style1.css' %}">
@@ -23,10 +23,10 @@
         <header>
             <nav class="navbar navbar-expand-lg navbar-red p-2">
                 <div class="container-fluid align-items-center">
-                    <a class="navbar-brand" href="{% url 'inicio' %}">
+                    <a class="navbar-brand" href="#">
                         <img src="{% static 'images/logo.png' %}" alt="Logo" class="ms-4 img-fluid" style="width: 110px; height: 110px;" />
                     </a>
-        
+
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link me-3 fw-bold" aria-current="page" href="{% url 'inicio' %}">Inicio</a>
@@ -47,18 +47,18 @@
                             <a class="nav-link me-3 fw-bold" href="#Contacto">Contacto</a>
                         </li>
                     </ul>
-        
-                    <form class="mx-auto" role="search" style="max-width: 400px; width: 100%;">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Buscar" aria-label="Buscar" />
-                            <span class="input-group-text" id="search-button">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </span>
-                        </div>
-                    </form>
-        
+
+                        <form class="mx-auto" role="search" style="max-width: 400px; width: 100%;">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Buscar" aria-label="Buscar" />
+                                <span class="input-group-text" id="search-button">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </span>
+                            </div>
+                        </form>
+
                     <div class="d-flex">
-                        <a href="{% url 'login' %}" class="me-3 fw-bold">Iniciar sesión</a>
+                        <a href="#" class="me-3 fw-bold">Iniciar sesión</a>
                         <a href="#" class="fw-bold">Registrarse</a>
                     </div>
                 </div>
@@ -70,60 +70,32 @@
                 <img src="{% static 'images/InicioLogo.png' %}" alt="Bienvenido a MotoAutoDast" />
                 <div class="hero-text">BIENVENIDO A MOTOAUTODAST</div>
             </div>
-        
+            
             <div class="container my-5">
-                <h2 class="text-center">Productos Más Vendidos</h2>
+                <h2 class="text-center">{{ categoria }}</h2>
                 <div class="row text-center mt-4">
-                    <!-- Productos 1 -->
-                    <div class="col-md-4 mb-4">
-                        <a href="ruta_del_producto1.html" class="text-decoration-none">
-                            <div class="card border-0">
-                                <img src="{% static 'images/casco.png' %}" class="card-img-top imgStyle mx-auto" alt="Casco ICH Multipropósito">
-                                <div class="card-body">
-                                    <h5 class="card-title text-dark">Casco ICH Multipropósito</h5>
+                    {% for producto in productos %}
+                        <div class="col-md-4 mb-4">
+                            <a href="{% url 'producto_detalle' producto.id %}" class="text-decoration-none">
+                                <div class="card border-0">
+                                    {% if producto.imagen %}
+                                        <img src="{{ producto.imagen.url }}" class="card-img-top imgStyle mx-auto" alt="{{ producto.nombre_producto }}">
+                                    {% else %}
+                                        <img src="{% static 'images/placeholder.png' %}" class="card-img-top imgStyle mx-auto" alt="Imagen no disponible">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title text-dark">{{ producto.nombre_producto }}</h5>
+                                        <p class="card-text">${{ producto.costo|floatformat:0 }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-        
-                    <!-- Productos 2 -->
-                    <div class="col-md-4 mb-4">
-                        <a href="ruta_del_producto2.html" class="text-decoration-none">
-                            <div class="card border-0">
-                                <img src="{% static 'images/espejos.png' %}" class="card-img-top imgStyle mx-auto" alt="Espejos">
-                                <div class="card-body">
-                                    <h5 class="card-title text-dark">Espejos</h5>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-        
-                    <!-- Productos 3 -->
-                    <div class="col-md-4 mb-4">
-                        <a href="ruta_del_producto3.html" class="text-decoration-none">
-                            <div class="card border-0">
-                                <img src="{% static 'images/neumatico.png' %}" class="card-img-top imgStyle mx-auto" alt="Neumáticos">
-                                <div class="card-body">
-                                    <h5 class="card-title text-dark">Neumáticos</h5>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- Productos 4 -->
-                    <div class="col-md-4 mb-4">
-                        <a href="ruta_del_producto4.html" class="text-decoration-none">
-                            <div class="card border-0">
-                                <img src="{% static 'images/aceite.png' %}" class="card-img-top imgStyle mx-auto" alt="Aceites">
-                                <div class="card-body">
-                                    <h5 class="card-title text-dark">Aceites</h5>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    {% empty %}
+                        <p>No hay productos disponibles en la categoría {{ categoria }}.</p>
+                    {% endfor %}
                 </div>
             </div>
-        </main> 
+        </main>
         
         
 
