@@ -68,7 +68,7 @@ def producto_detalle(req, id):
     return render(req, 'producto_detalle.html', {'producto': producto})
 
 def restablecer_contrasena(request):
-    return render(request, 'registration/restablecer_contrasena.html')
+    return render(request, 'registration/restablecer_contrasena.html', {'mostrar_busqueda': False})
 
 def contacto(request):
     return render(request, 'contacto.html', {'mostrar_busqueda': False})
