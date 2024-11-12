@@ -5,14 +5,13 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.db.models import Q
 from MainApp.forms import ProductoForm
-from .models import Producto, Categoria
+from .models import Producto, Categoria, Categoria, Bodega, Producto
 from .forms import CustomUserCreationForm  # Importa el formulario personalizado
 
 @login_required
 def inicio(request):
-    if request.user.is_superuser:
-        return redirect('/admin/dashboard')
-    return render(request, 'inicio.html')
+    productos = Producto.objects.all()  
+    return render(request, 'inicio.html', {'productos': productos})
 
 def lista_productos(request):
     productos = Producto.objects.all()
@@ -101,8 +100,48 @@ def agregar_producto(request):
         form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('listar_productos')  # Redirige a la lista de productos
+            return redirect('listar_productos')  # Redirige a la lista de productos después de guardar
     else:
         form = ProductoForm()
-    
-    return render(request, 'admin/agregar_producto.html', {'form': form})
+
+    # Obtiene las categorías y bodegas de la base de datos
+    categorias = Categoria.objects.all()
+    bodegas = Bodega.objects.all()
+
+    return render(request, 'admin/agregar_producto.html', {
+        'form': form,
+        'categorias': categorias,
+        'bodegas': bodegas,
+    })
+
+def editar_producto(request, producto_id):
+    # Obtén el producto a editar
+    producto = get_object_or_404(Producto, id=producto_id)
+
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_productos')  # Redirige a la lista de productos
+    else:
+        form = ProductoForm(instance=producto)
+
+    # Obtén todas las categorías y bodegas para los select
+    categorias = Categoria.objects.all()
+    bodegas = Bodega.objects.all()
+
+    return render(request, 'admin/editar_producto.html', {
+        'form': form,
+        'producto': producto,
+        'categorias': categorias,
+        'bodegas': bodegas,
+    })
+
+def eliminar_producto(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id)
+
+    if request.method == 'POST':
+        producto.delete()
+        return redirect('listar_productos')  # Redirige a la lista de productos después de eliminar
+
+    return render(request, 'admin/confirmar_eliminacion.html', {'producto': producto})

@@ -37,6 +37,7 @@ class Producto(models.Model):
     bodega = models.ForeignKey('Bodega', on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
     costo = models.IntegerField(default=0)
+    stock = models.IntegerField(default=0)
 
     def __str__(self):
         return self.nombre_producto
