@@ -145,8 +145,8 @@ LOGOUT_REDIRECT_URL = 'inicio'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587  # Gmail utiliza TLS en el puerto 587
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'motoautodast8@gmail.com'  # Dirección del correo del bot
-EMAIL_HOST_PASSWORD = 'MotoAutoDast2024'  # Contraseña del bot o App Password
-DEFAULT_FROM_EMAIL = 'motoautodast8@gmail.com'  # Correo remitente
+EMAIL_HOST_USER = 'motoautodast8@gmail.com'
+EMAIL_HOST_PASSWORD = 'qzoeryqqwziascyv'  # Tu contraseña de aplicación, sin espacios
+DEFAULT_FROM_EMAIL = 'motoautodast8@gmail.com'

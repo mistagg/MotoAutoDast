@@ -7,6 +7,20 @@ from django.db.models import Q
 from MainApp.forms import ProductoForm, ContactoForm
 from .models import Producto, Categoria, Categoria, Bodega, Producto, Contacto
 from .forms import CustomUserCreationForm  # Importa el formulario personalizado
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+
+
+
+
+
+
 
 def inicio(request):
     productos = Producto.objects.all()  
@@ -173,3 +187,27 @@ def ajustes(request):
 
 def ayudaLogin(request):
     return render(request, 'admin/AyudaLogin.html')
+
+
+def enviar_email_con_nombre_usuario(request, user_email):
+    try:
+        user = User.objects.get(email=user_email)
+    except User.DoesNotExist:
+        return  # Opcionalmente manejar el caso de usuario no encontrado
+    
+    # Preparar el contexto con el nombre de usuario
+    current_site = get_current_site(request)
+    context = {
+        'username': user.username,  # Nombre de usuario
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': default_token_generator.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http',
+    }
+
+    # Renderizar el mensaje HTML y enviar el correo
+    subject = "Restablece tu contraseña"
+    message = render_to_string('emails/password_reset_email.html', context)
+    email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [user_email])
+    email.attach_alternative(message, "text/html")
+    email.send()
