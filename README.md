@@ -1,6 +1,6 @@
 "# MotoAutoDust" 
 
-### Alternativa Instrucciones para iniciar el proyecto
+### Instrucciones para iniciar el proyecto
 
 1. Clona el repositorio:
    ```bash
