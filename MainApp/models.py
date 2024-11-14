@@ -1,4 +1,5 @@
 from django.db import models
+from decimal import Decimal
 
 # Create your models here.
 
@@ -49,14 +50,18 @@ class Compra(models.Model):
     def __str__(self):
         return f"Compra {self.id} - Cliente: {self.cliente.nombre_cliente}"
 
-class ProductoCompra(models.Model):
-    compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
+class Carro(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    cantidad = models.IntegerField()
-    precio_unitario_venta = models.DecimalField(max_digits=10, decimal_places=2)
+    cantidad = models.PositiveIntegerField(default=1)
+    precio_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
+    def calcular_precio_total(self):
+        # Asegúrate de que todo sea Decimal antes de multiplicar
+        self.precio_total = Decimal(self.cantidad) * Decimal(self.producto.costo)
+        self.save()
+        
     def __str__(self):
-        return f"{self.producto.nombre_producto} - {self.cantidad} unidades"
+        return f"Carro: {self.producto.nombre_producto} - Cantidad: {self.cantidad}"
 
 class Ingreso(models.Model):
     administrador = models.ForeignKey(Administrador, on_delete=models.CASCADE)
