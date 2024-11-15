@@ -1,60 +1,50 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
-<head>
-    <link rel="stylesheet" href="{% static 'css/carro.css' %}">
-</head>
-
-<main class="d-flex flex-column flex-grow-1">
-    <div class="container mt-4 mb-5">
-        <div class="row">
-            <!-- Lista de productos (Carro) -->
-            <div class="col-lg-8 col-md-7 cart-items">
-                <div class="cart-header d-flex justify-content-between align-items-center mb-4">
-                    <h1 class="cart-title">CARRO</h1>
-                    <span class="product-count">1 PRODUCTO</span>
-                </div>
-                <p class="delivery-info">Entrega est. — <strong>4-6 días laborables</strong></p>
-
-                <div class="cart-items-scrollable">
-                    {% for item in productos_carro %}
-                    <div class="cart-item d-flex mb-4">
-                        <div class="cart-item-image-wrapper">
-                            <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre_producto }}" class="cart-item-image">
-                        </div>
-                        <div class="cart-item-details ms-3">
-                            <h2 class="cart-item-title">{{ item.producto.nombre_producto }}</h2>
-                            <p class="cart-item-price">${{ item.producto.costo|floatformat:2 }}</p>
-                            <p class="cart-item-quantity">Cantidad: {{ item.cantidad }}</p>
-                            <p class="cart-item-total">Total: €{{ item.precio_total|floatformat:2 }}</p>
-                            <div class="cart-item-actions d-flex mt-2">
-                                <form method="post" action="#">
+<main>
+    <h1>Carrito de Compras</h1>
+    <div class="cart-container">
+        {% if cart.items %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart.items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>${{ item.product.price }}</td>
+                            <td>
+                                <form method="post" action="{% url 'update_cart' item.product.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="edit-btn btn btn-link me-2">Editar</button>
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                                    <button type="submit">Actualizar</button>
                                 </form>
-                                <form method="post" action="#">
+                            </td>
+                            <td>${{ item.total_price }}</td>
+                            <td>
+                                <form method="post" action="{% url 'remove_from_cart' item.product.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="remove-btn btn btn-link">Eliminar</button>
+                                    <button type="submit">Eliminar</button>
                                 </form>
-                            </div>
-                        </div>
-                    </div>
+                            </td>
+                        </tr>
                     {% endfor %}
-                </div>
+                </tbody>
+            </table>
+            <div class="cart-summary">
+                <p><strong>Total:</strong> ${{ cart.total }}</p>
+                <a href="{% url 'checkout' %}" class="btn btn-primary">Proceder al Pago</a>
             </div>
-
-            <!-- Resumen del pedido -->
-            <div class="col-lg-4 col-md-5 cart-summary">
-                <h2 class="summary-title">Resumen del Pedido</h2>
-                <p class="summary-line"><span>Subtotal:</span> €{{ subtotal|floatformat:2 }}</p>
-                <p class="summary-line"><span>Envío:</span> <span class="free-shipping">Gratis</span></p>
-                <p class="summary-line"><span>IVA incluido:</span> ${{ iva|floatformat:2 }}</p>
-                <p class="summary-total mt-4"><span>Total Estimado:</span> <strong>€{{ total|floatformat:2 }}</strong></p>
-                <button class="pay-btn btn btn-dark mt-4 w-100">Pagar</button>
-            </div>
-        </div>
+        {% else %}
+            <p>Tu carrito está vacío.</p>
+        {% endif %}
     </div>
 </main>
-
 {% endblock %}

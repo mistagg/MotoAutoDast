@@ -32,14 +32,6 @@
                     <li><strong>Calidad:</strong> Tecnosíntesis</li>
                     <li><strong>Gama de Productos:</strong> Motocicleta</li>
                 </ul>
-                
-                <!-- Botón para agregar al carrito -->
-                <form method="post" action="{% url 'agregar_al_carro' producto.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary mt-3">
-                        Agregar al carrito
-                    </button>
-                </form>
             </div>
         </div>
     </div>
