@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.db.models import Q
 from MainApp.forms import ProductoForm, ContactoForm
-from .models import Producto, Categoria, Categoria, Bodega, Producto, Contacto
-from .forms import CustomUserCreationForm  # Importa el formulario personalizado
+from .models import Producto, Categoria, Bodega, Contacto, Cart, CartItem
+from .forms import CustomUserCreationForm, AddToCartForm
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
@@ -211,3 +211,51 @@ def enviar_email_con_nombre_usuario(request, user_email):
     email = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [user_email])
     email.attach_alternative(message, "text/html")
     email.send()
+
+def add_to_cart(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id)
+    carrito = request.session.get('carrito', {})
+    cantidad = int(request.POST.get('quantity', 1))  # Obtener cantidad desde el formulario
+
+    if str(producto_id) in carrito:
+        carrito[str(producto_id)]['cantidad'] = cantidad  # Actualiza cantidad
+    else:
+        carrito[str(producto_id)] = {
+            'nombre': producto.nombre_producto,
+            'precio': producto.costo,
+            'cantidad': cantidad,
+        }
+
+    request.session['carrito'] = carrito
+    messages.success(request, f'{producto.nombre_producto} se añadió al carrito.')
+    return redirect('view_cart')
+
+def view_cart(request):
+    carrito = request.session.get('carrito', {})
+    total = 0
+    for key, item in carrito.items():
+        item['total'] = item['precio'] * item['cantidad'] 
+        total += item['total']  
+    
+    return render(request, 'carro.html', {'carrito': carrito, 'total': total})
+
+
+
+def remove_from_cart(request, key):
+    carrito = request.session.get('carrito', {})
+    
+    # Verificar si el producto está en el carrito y eliminarlo
+    if key in carrito:
+        del carrito[key]
+        messages.success(request, 'Producto eliminado del carrito.')
+    else:
+        messages.error(request, 'El producto no estaba en el carrito.')
+
+    # Actualizar la sesión
+    request.session['carrito'] = carrito
+    return redirect('view_cart')
+
+def checkout(request):
+    carrito = request.session.get('carrito', {})
+    total = sum(item['precio'] * item['cantidad'] for item in carrito.values())
+    return render(request, 'checkout.html', {'carrito': carrito, 'total': total})

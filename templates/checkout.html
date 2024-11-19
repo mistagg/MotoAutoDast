@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load cart_extras %}  <!-- Cargar filtros personalizados -->
+{% block content %}
+<main>
+    <section class="py-5" style="background-color: #f5f5f5;">
+        <div class="container">
+            <h2 class="text-center mb-4 fw-bold">Resumen de Compra</h2>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {% if carrito %}
+                        <h5 class="mb-4">Detalles de tu compra:</h5>
+                        <ul class="list-group mb-4">
+                            {% for key, item in carrito.items %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <strong>{{ item.nombre }}</strong> - ${{ item.precio|floatformat:2 }} x {{ item.cantidad }}
+                                    </span>
+                                    <span class="fw-bold">${{ item.precio|mul:item.cantidad }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="fs-5 fw-bold mb-0">Total: ${{ total }}</p>
+                            <a href="#" class="btn btn-success btn-lg">
+                                <i class="bi bi-credit-card"></i> Proceder al Pago
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="text-center fs-5 text-muted">Tu carrito está vacío.</p>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'lista_productos' %}" class="btn btn-outline-primary">
+                                <i class="bi bi-arrow-left"></i> Volver a la tienda
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.contrib.auth.models import User
 from MainApp.models import Producto, Contacto
+from .models import Producto
+
 from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
@@ -113,3 +115,11 @@ class CustomPasswordResetForm(PasswordResetForm):
                 context, from_email, user.email,
                 html_email_template_name=html_email_template_name
             )
+
+class AddToCartForm(forms.Form):
+    producto_id = forms.IntegerField(widget=forms.HiddenInput())
+    cantidad = forms.IntegerField(
+        min_value=1, 
+        initial=1, 
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 80px;'})
+    )          

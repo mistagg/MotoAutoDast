@@ -17,9 +17,22 @@
             <!-- Columna de Detalles del Producto -->
             <div class="col-md-8">
                 <h2 class="fw-bold">{{ producto.nombre_producto }}</h2>
+
+                <!-- Mensaje dinámico de stock -->
+                {% if producto.stock == 0 %}
+                    <p class="text-danger fw-bold">SIN STOCK</p>
+                {% elif producto.stock < 10 %}
+                    <p class="text-warning fw-bold">POCO STOCK</p>
+                {% else %}
+                    <p class="text-success fw-bold">EN STOCK</p>
+                {% endif %}
                 
-                <p class="text-success fw-bold">EN STOCK</p>
                 <h3 class="text-dark mb-4">${{ producto.costo|floatformat:0 }}</h3>
+                <form method="post" action="{% url 'add_to_cart' producto.id %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Añadir al Carrito</button>
+                </form>
                 
                 <h5 class="fw-bold">DESCRIPCIÓN:</h5>
                 <p>{{ producto.descripcion }}</p>

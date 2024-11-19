@@ -18,6 +18,12 @@ urlpatterns = [
     path('contacto/', views.form_contacto, name='form_contactos'),
     path('ayudaLogin/', views.ayudaLogin, name='ayudaLogin'),
     path('admin/', include('custom_admin.urls')),
+    path('carro/agregar/<int:producto_id>/', views.add_to_cart, name='add_to_cart'),
+    path('carro/', views.view_cart, name='view_cart'),
+    path('carro/eliminar/<str:key>/', views.remove_from_cart, name='remove_from_cart'),
+    path('checkout/', views.checkout, name='checkout'),
+    
+
 
 
     path('dj-admin/', admin.site.urls),
