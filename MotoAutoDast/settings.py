@@ -18,19 +18,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 AZURE_ACCOUNT_NAME = os.environ.get("AZURE_ACCOUNT_NAME")
 AZURE_ACCOUNT_KEY = os.environ.get("AZURE_ACCOUNT_KEY")
-AZURE_CONTAINER = os.environ.get("AZURE_CONTAINER", "static")
+
+# Contenedores separados
+AZURE_STATIC_CONTAINER = "static"
+AZURE_MEDIA_CONTAINER = "media"
 
 AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
-AZURE_LOCATION = ""
 
-STATIC_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/"
+# STATIC
+STATIC_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{AZURE_STATIC_CONTAINER}/"
+STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStaticStorage"
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStorage"
+# MEDIA
+MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{AZURE_MEDIA_CONTAINER}/"
 DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
 
 STATICFILES_DIRS = [
