@@ -4,32 +4,19 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ==========================================================
-# AZURE STORAGE (simple, sin archivos extra)
+# STATIC & MEDIA (LOCAL)
 # ==========================================================
 
-AZURE_ACCOUNT_NAME = os.environ.get("AZURE_ACCOUNT_NAME")
-AZURE_ACCOUNT_KEY = os.environ.get("AZURE_ACCOUNT_KEY")
-
-# Contenedores
-AZURE_CONTAINER = "media"      # para archivos subidos
-AZURE_STATIC_CONTAINER = "static"
-
-AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
-
-# ---------- STATIC ----------
-STATIC_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{AZURE_STATIC_CONTAINER}/"
+STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStorage"
-
-# ---------- MEDIA ----------
-MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/"
-DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
-
-# Archivos locales para collectstatic()
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 # ==========================================================
 # DJANGO CONFIG
@@ -52,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'storages',
 ]
 
 MIDDLEWARE = [
@@ -85,10 +71,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MotoAutoDast.wsgi.application'
 
+
+# ==========================================================
+# DATABASE (SQLite persistente para Azure)
+# ==========================================================
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': '/home/db.sqlite3',   # ✔ Ruta persistente en Azure
     }
 }
 
@@ -115,3 +106,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
