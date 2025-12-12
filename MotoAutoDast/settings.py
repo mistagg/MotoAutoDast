@@ -25,6 +25,8 @@ AZURE_CONTAINER = os.environ.get("AZURE_CONTAINER", "static")
 
 STATIC_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_CONTAINER}/"
 
+# Requerido por collectstatic incluso si se usa Azure Storage
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStorage"
 DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
