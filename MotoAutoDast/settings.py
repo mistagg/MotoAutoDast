@@ -33,6 +33,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStorage"
 DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 # Quick-start development settings - unsuitable for production
