@@ -4,28 +4,27 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ==========================================================
-# STATIC EN AZURE — SIN storage_backends
+# STATIC LOCAL (DEFAULT) <--- Sección Corregida
 # ==========================================================
 
+# Se mantiene la lectura de variables, pero la configuración subsiguiente no las usará.
 AZURE_ACCOUNT_NAME = os.environ.get("AZURE_ACCOUNT_NAME")
 AZURE_ACCOUNT_KEY = os.environ.get("AZURE_ACCOUNT_KEY")
-AZURE_STATIC_CONTAINER = "static"
+AZURE_STATIC_CONTAINER = os.environ.get("AZURE_CONTAINER", "static")
 
-AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
+# STATIC URL local. Esta es la URL de acceso que se usará.
+STATIC_URL = '/static/' 
 
-# STATIC URL desde Azure Blob
-STATIC_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{AZURE_STATIC_CONTAINER}/"
-
-# Carpeta local que collectstatic llenará ANTES de subir a Azure
+# Carpeta local que collectstatic llenará (es correcta)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# LOCAL static dir (CSS, JS propios)
+# LOCAL static dir (de tus apps y la carpeta raíz 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-# Usa el backend simple de Azure Storage para static
-STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStorage"
+# NOTA: Hemos eliminado la línea STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStorage"
+# para que Django use el almacenamiento local por defecto.
 
 # ==========================================================
 # MEDIA LOCAL (NO AZURE)
