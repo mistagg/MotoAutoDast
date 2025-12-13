@@ -4,7 +4,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ==========================================================
-# STATIC LOCAL (DEFAULT) <--- Sección Corregida
+# STATIC LOCAL (DEFAULT)
 # ==========================================================
 
 # Se mantiene la lectura de variables, pero la configuración subsiguiente no las usará.
@@ -13,7 +13,7 @@ AZURE_ACCOUNT_KEY = os.environ.get("AZURE_ACCOUNT_KEY")
 AZURE_STATIC_CONTAINER = os.environ.get("AZURE_CONTAINER", "static")
 
 # STATIC URL local. Esta es la URL de acceso que se usará.
-STATIC_URL = '/static/' 
+STATIC_URL = '/static/'
 
 # Carpeta local que collectstatic llenará (es correcta)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
@@ -23,8 +23,19 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-# NOTA: Hemos eliminado la línea STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStorage"
-# para que Django use el almacenamiento local por defecto.
+# Usar WhiteNoise en producción para compresión y cache de largo plazo.
+# En desarrollo evitamos los problemas del manifest storage estableciendo
+# el storage por defecto cuando DEBUG=True.
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    # almacenamiento por defecto en DEV para evitar errores de manifest
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+# Tiempo de cache que entregará WhiteNoise (en segundos). 1 año por defecto.
+WHITENOISE_MAX_AGE = 31536000
 
 # ==========================================================
 # MEDIA LOCAL (NO AZURE)
@@ -39,7 +50,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-DEBUG = os.environ.get("DEBUG", "False") == "True"
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
@@ -57,6 +67,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # <-- añadido aquí, justo después de SecurityMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
