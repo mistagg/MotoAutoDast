@@ -45,7 +45,7 @@ from MainApp.forms import CustomPasswordResetForm
 urlpatterns = [
 
     path('admin/', include('custom_admin.urls')), # si no estaba, agrégalo
-    path('admin/', include('admin.site.urls')),
+  
 
 
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
