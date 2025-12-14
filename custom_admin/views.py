@@ -4,9 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from MainApp.models import Compra, Cliente
 from django.db.models import Sum
-from MainApp.models import Compra, Producto, Categoria
+from MainApp.models import Compra, Producto, Categoria, cliente
 from django.db.models import Sum, Count
 from django.utils import timezone
 from MainApp.models import Visita
