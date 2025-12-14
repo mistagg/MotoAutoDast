@@ -27,6 +27,7 @@ STATICFILES_DIRS = [
 # En desarrollo evitamos los problemas del manifest storage estableciendo
 # el storage por defecto cuando DEBUG=True.
 DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = True
 
 if not DEBUG:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
