@@ -50,7 +50,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*","motoautodast-dzgygmfvcaddgzbs.chilecentral-01.azurewebsites.net"]
 
 INSTALLED_APPS = [
     'custom_admin',
