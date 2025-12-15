@@ -44,7 +44,8 @@ from MainApp.forms import CustomPasswordResetForm
 
 urlpatterns = [
 
-    path('admin/', include('custom_admin.urls')), # si no estaba, agrégalo
+   # MotoAutoDust/urls.py
+    path('admin/', include('custom_admin.urls', namespace='custom_admin')), # si no estaba, agrégalo
     path('dj-admin/', include((admin.site.urls, 'admin'), namespace='admin')), 
   
 
