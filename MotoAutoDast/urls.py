@@ -45,7 +45,7 @@ from MainApp.forms import CustomPasswordResetForm
 urlpatterns = [
 
    # Custom admin panel
-    path('admin/', include(('custom_admin.urls', 'custom_admin'))),
+    path('admin/', include(('custom_admin.urls', 'custom_admin') namespace='admin')),
 
     # Autenticación
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
