@@ -44,21 +44,18 @@ from MainApp.forms import CustomPasswordResetForm
 
 urlpatterns = [
 
-   # MotoAutoDust/urls.py
-    path('admin/', include('custom_admin.urls', namespace='custom_admin')), # si no estaba, agrégalo
-    path('dj-admin/', include((admin.site.urls, 'admin'), namespace='admin')), 
-  
+   # Custom admin panel
+    path('admin/', include(('custom_admin.urls', 'custom_admin'), namespace='custom_admin')),
 
-
+    # Autenticación
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
 
-
+     # MainApp
     path('accounts/', include('MainApp.urls')),
-
     path('', include('MainApp.urls')),   
+
 
     path('restablecer_contrasena/', auth_views.PasswordResetView.as_view(
 
