@@ -12,9 +12,10 @@ from MainApp.models import Visita
 
 def admin_login(req):
     try:
+        # Si ya está logueado y es staff
         if req.user.is_authenticated:
             if req.user.is_staff:
-                return redirect('/admin/dashboard/')
+                return redirect('custom_admin:dashboard')
             else:
                 return redirect('/')
 
@@ -22,25 +23,70 @@ def admin_login(req):
             username = req.POST.get('username')
             password = req.POST.get('password')
 
-            user_obj = authenticate(username=username, password=password)
+            # Autenticación correcta para Django 5
+            user_obj = authenticate(
+                request=req,
+                username=username,
+                password=password
+            )
 
-            if user_obj:
+            if user_obj is not None:
                 if user_obj.is_staff:
                     login(req, user_obj)
-                    return redirect('/admin/dashboard/')
+                    return redirect('custom_admin:dashboard')
                 else:
-                    messages.info(req, 'No tienes permiso para acceder a esta sección')
+                    messages.error(req, 'No tienes permiso para acceder.')
                     return redirect('/')
             else:
-                messages.info(req, 'Usuario o contraseña incorrectos')
-                return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+                messages.error(req, 'Usuario o contraseña incorrectos.')
+                return redirect('custom_admin:admin_login')
 
+        # Render del login si no es POST
         return render(req, 'admin/Adminlogin.html')
 
     except Exception as e:
-        print("Error:", e)
+        print("ERROR LOGIN ADMIN:", e)
         messages.error(req, 'Error inesperado al intentar iniciar sesión')
-        return redirect('/')
+        return redirect('custom_admin:admin_login')
+def admin_login(req):
+    try:
+        # Si ya está logueado y es staff
+        if req.user.is_authenticated:
+            if req.user.is_staff:
+                return redirect('custom_admin:dashboard')
+            else:
+                return redirect('/')
+
+        if req.method == 'POST':
+            username = req.POST.get('username')
+            password = req.POST.get('password')
+
+            # Autenticación correcta para Django 5
+            user_obj = authenticate(
+                request=req,
+                username=username,
+                password=password
+            )
+
+            if user_obj is not None:
+                if user_obj.is_staff:
+                    login(req, user_obj)
+                    return redirect('custom_admin:dashboard')
+                else:
+                    messages.error(req, 'No tienes permiso para acceder.')
+                    return redirect('/')
+            else:
+                messages.error(req, 'Usuario o contraseña incorrectos.')
+                return redirect('custom_admin:admin_login')
+
+        # Render del login si no es POST
+        return render(req, 'admin/Adminlogin.html')
+
+    except Exception as e:
+        print("ERROR LOGIN ADMIN:", e)
+        messages.error(req, 'Error inesperado al intentar iniciar sesión')
+        return redirect('custom_admin:admin_login')
+
 
 
 
@@ -115,3 +161,6 @@ def pagos_view(request):
 
 def ajustes(request):
     return render(request, 'admin/ajustes.html')
+
+def ayuda_login(request):
+    return render(request, 'admin/ayuda_login.html')
