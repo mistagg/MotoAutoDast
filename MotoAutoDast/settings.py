@@ -27,7 +27,7 @@ STATICFILES_DIRS = [
 # En desarrollo evitamos los problemas del manifest storage estableciendo
 # el storage por defecto cuando DEBUG=True.
 DEBUG = os.environ.get("DEBUG", "False") == "True"
-DEBUG = True
+DEBUG = False
 
 if not DEBUG:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -51,7 +51,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["motoautodast-dzgvgmfvcaddgzbs.chilecentral-01.azurewebsites.net"]
 
 INSTALLED_APPS = [
     'custom_admin',
