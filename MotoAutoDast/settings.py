@@ -63,6 +63,18 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",") if os.environ.get
 if not DEBUG:
     ALLOWED_HOSTS.append(".azurewebsites.net")
 
+# Configuración CSRF para Azure
+CSRF_TRUSTED_ORIGINS = [
+    "https://motoautodast-app-aqfrfhewgncthyab.brazilsouth-01.azurewebsites.net",
+    "https://motoautodast-dzgvgmfvcaddgzbs.chilecentral-01.azurewebsites.net",
+]
+
+# En producción, agregar todos los dominios de Azure
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS.extend([
+        "https://*.azurewebsites.net",
+    ])
+
 INSTALLED_APPS = [
     'custom_admin',
     'MainApp',
