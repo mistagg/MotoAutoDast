@@ -1,6 +1,8 @@
 # Entornos virtuales
 env/
 venv/
+.venv/
+antenv/
 
 # Python cache
 __pycache__/
@@ -10,6 +12,7 @@ __pycache__/
 
 # Base de datos local
 db.sqlite3
+*.db
 
 # Archivos media (uploads)
 media/
@@ -23,3 +26,11 @@ media/
 
 # Carpetas internas
 .ai/
+
+# Variables de entorno
+.env
+*.env
+
+# Archivos estáticos compilados
+staticfiles/
+static_root/

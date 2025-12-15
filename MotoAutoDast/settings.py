@@ -26,8 +26,7 @@ STATICFILES_DIRS = [
 # Usar WhiteNoise en producción para compresión y cache de largo plazo.
 # En desarrollo evitamos los problemas del manifest storage estableciendo
 # el storage por defecto cuando DEBUG=True.
-DEBUG = os.environ.get("DEBUG", "False") == "True"
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 if not DEBUG:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -51,7 +50,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-ALLOWED_HOSTS = ["motoautodast-dzgvgmfvcaddgzbs.chilecentral-01.azurewebsites.net"]
+ALLOWED_HOSTS = ["motoautodast-dzgvgmfvcaddgzbs.chilecentral-01.azurewebsites.net", "127.0.0.1", "localhost"]
 
 INSTALLED_APPS = [
     'custom_admin',
