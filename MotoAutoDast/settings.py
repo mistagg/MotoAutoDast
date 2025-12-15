@@ -28,11 +28,8 @@ STATICFILES_DIRS = [
 # el storage por defecto cuando DEBUG=True.
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-else:
-    # almacenamiento por defecto en DEV para evitar errores de manifest
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+# WhiteNoise configuration para servir archivos estáticos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Tiempo de cache que entregará WhiteNoise (en segundos). 1 año por defecto.
 WHITENOISE_MAX_AGE = 31536000
@@ -74,6 +71,15 @@ if not DEBUG:
     CSRF_TRUSTED_ORIGINS.extend([
         "https://*.azurewebsites.net",
     ])
+
+# Configuraciones de seguridad para producción
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 año
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 INSTALLED_APPS = [
     'custom_admin',
