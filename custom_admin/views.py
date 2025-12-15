@@ -13,41 +13,34 @@ from MainApp.models import Visita
 def admin_login(req):
     try:
         if req.user.is_authenticated:
-            if req.user.is_superuser:
+            if req.user.is_staff:
                 return redirect('/admin/dashboard/')
             else:
-                return redirect('/')  # Redirige a la página de inicio si no es superusuario
+                return redirect('/')
 
         if req.method == 'POST':
             username = req.POST.get('username')
             password = req.POST.get('password')
 
-            # Verificar si el usuario existe
-            user_obj = User.objects.filter(username=username).first()
-            if not user_obj:
-                messages.info(req, 'Cuenta no encontrada')
-                return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
-            
-            # Autenticar al usuario
             user_obj = authenticate(username=username, password=password)
 
             if user_obj:
-                if user_obj.is_superuser:
-                    # Iniciar sesión y redirigir al dashboard si es superusuario
+                if user_obj.is_staff:
                     login(req, user_obj)
                     return redirect('/admin/dashboard/')
                 else:
-                    # Redirige a la página de inicio si el usuario no es superusuario
                     messages.info(req, 'No tienes permiso para acceder a esta sección')
                     return redirect('/')
             else:
-                messages.info(req, 'Contraseña Incorrecta')
+                messages.info(req, 'Usuario o contraseña incorrectos')
                 return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
         return render(req, 'admin/Adminlogin.html')
-    
+
     except Exception as e:
-        print(e)
+        print("Error:", e)
+        messages.error(req, 'Error inesperado al intentar iniciar sesión')
+        return redirect('/')
 
 
 
