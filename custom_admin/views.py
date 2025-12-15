@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from MainApp.models import Compra, Producto, Categoria, cliente
+from MainApp.models import Compra, Producto, Categoria, Cliente
 from django.db.models import Sum, Count
 from django.utils import timezone
 from MainApp.models import Visita
