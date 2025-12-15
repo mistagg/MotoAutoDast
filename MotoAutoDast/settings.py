@@ -50,7 +50,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-ALLOWED_HOSTS = ["motoautodast-dzgvgmfvcaddgzbs.chilecentral-01.azurewebsites.net", "127.0.0.1", "localhost"]
+
+# ALLOWED_HOSTS configuración
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",") if os.environ.get("ALLOWED_HOSTS") else [
+    "motoautodast-app-aqfrfhewgncthyab.brazilsouth-01.azurewebsites.net",
+    "motoautodast-dzgvgmfvcaddgzbs.chilecentral-01.azurewebsites.net",
+    "127.0.0.1",
+    "localhost",
+]
+
+# En Azure, permitir todos los dominios *.azurewebsites.net
+if not DEBUG:
+    ALLOWED_HOSTS.append(".azurewebsites.net")
 
 INSTALLED_APPS = [
     'custom_admin',
