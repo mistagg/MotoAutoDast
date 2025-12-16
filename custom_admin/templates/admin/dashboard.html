@@ -1,0 +1,142 @@
+{% extends 'admin/baseAdmin.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1 class="mb-4 tcolor">Dashboard</h1>
+
+<style>
+    .metric-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        border: 1px solid #eee;
+    }
+
+    /* Evita que los gráficos se estiren hacia abajo */
+    .chart-container {
+        height: 350px;
+        position: relative;
+    }
+
+    .card canvas {
+        max-height: 330px !important;
+    }
+</style>
+
+<!-- TARJETAS SUPERIORES -->
+<div class="row mb-4">
+
+    <div class="col-md-4">
+        <div class="metric-card">
+            <h6>Pedidos Pendientes</h6>
+            <p><strong>{{ total_pedidos_pendientes }}</strong> Pedidos</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="metric-card">
+            <h6>Pedidos Enviados</h6>
+            <p><strong>{{ total_pedidos_enviados }}</strong> Pedidos</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="metric-card">
+            <h6>Ventas Totales</h6>
+            <p><strong>${{ total_ventas }}</strong></p>
+        </div>
+    </div>
+
+</div>
+
+<!-- GRÁFICOS -->
+<div class="row">
+
+    <!-- VISITAS DEL AÑO -->
+    <div class="col-md-8">
+        <div class="card p-3">
+            <h5 class="mb-3">Visitas del Año</h5>
+
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CATEGORÍAS MÁS VISTAS -->
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5 class="mb-3">Categorías Más Vistas</h5>
+
+            <div class="chart-container">
+                <canvas id="pieChart"></canvas>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- JSON seguro -->
+{{ meses_labels|json_script:"meses-labels" }}
+{{ visitas_data|json_script:"visitas-data" }}
+{{ categorias_labels|json_script:"categorias-labels" }}
+{{ categorias_valores|json_script:"categorias-valores" }}
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // VISITAS DEL AÑO
+    const meses = JSON.parse(document.getElementById('meses-labels').textContent);
+    const visitas = JSON.parse(document.getElementById('visitas-data').textContent);
+
+    new Chart(document.getElementById('myChart'), {
+        type: 'line',
+        data: {
+            labels: meses,
+            datasets: [{
+                label: 'Visitas',
+                data: visitas,
+                borderColor: '#ff6384',
+                backgroundColor: 'rgba(255, 99, 132, 0.3)',
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // CATEGORÍAS MÁS VISTAS
+    const categoriasLabels = JSON.parse(document.getElementById('categorias-labels').textContent);
+    const categoriasValores = JSON.parse(document.getElementById('categorias-valores').textContent);
+
+    new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: categoriasLabels,
+            datasets: [{
+                data: categoriasValores,
+                backgroundColor: [
+                    '#ff6384', 
+                    '#36a2eb', 
+                    '#ffcd56', 
+                    '#9966ff'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+
+{% endblock %}

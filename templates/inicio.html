@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <div class="hero-section">
+        <img src="{% static 'images/bg.jpg' %}" alt="Bienvenido a MotoAutoDast" />
+        <div class="hero-text">BIENVENIDO A MOTOAUTODAST</div>
+    </div>
+
+    <div class="container my-5">
+        <h2 class="text-center">Productos Más Vistos</h2>
+        <div id="productosCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for producto in productos %}
+                    {% if forloop.counter0|divisibleby:3 %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="row justify-content-center">
+                    {% endif %}
+                    
+                    <div class="col-md-4 mb-4">
+                        <a href="{% url 'producto_detalle' producto.id %}" class="text-decoration-none">
+                            <div class="card border-0">
+                                {% if producto.imagen %}
+                                    <img src="{{ producto.imagen.url }}" class="card-img-top imgStyle mx-auto" alt="{{ producto.nombre_producto }}" style="width: 200px;">
+                                {% else %}
+                                    <img src="{% static 'images/placeholder.png' %}" class="card-img-top imgStyle mx-auto" alt="Imagen no disponible" style="width: 200px;">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title text-dark">{{ producto.nombre_producto }}</h5>
+                                    <p class="card-text">${{ producto.costo|floatformat:0 }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    {% if forloop.counter|divisibleby:3 or forloop.last %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Controles de navegación con colores personalizados -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#productosCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" style="background-color: black; border-radius: 50%; width: 2rem; height: 2rem;"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productosCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" style="background-color: black; border-radius: 50%; width: 2rem; height: 2rem;"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </div>
+</main>
+{% endblock %}
