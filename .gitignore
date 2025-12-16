@@ -1,8 +1,6 @@
 # Entornos virtuales
 env/
 venv/
-.venv/
-antenv/
 
 # Python cache
 __pycache__/
@@ -12,10 +10,13 @@ __pycache__/
 
 # Base de datos local
 db.sqlite3
-*.db
+*.sqlite3
 
 # Archivos media (uploads)
 media/
+
+# Static files
+staticfiles/
 
 # Archivos de IDE
 .vscode/
@@ -29,8 +30,7 @@ media/
 
 # Variables de entorno
 .env
-*.env
 
-# Archivos estáticos compilados
-staticfiles/
-static_root/
+# Azure y secretos
+*.key
+*.pem
